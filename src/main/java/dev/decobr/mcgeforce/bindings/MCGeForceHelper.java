@@ -1,5 +1,6 @@
 package dev.decobr.mcgeforce.bindings;
 
+import dev.decobr.mcgeforce.MCGeForce;
 import dev.decobr.mcgeforce.utils.NativeUtils;
 import dev.sllcoding.mcgeforce.data.HighlightType;
 
@@ -30,12 +31,16 @@ public class MCGeForceHelper {
         }
     }
 
+    public static void saveHighlight(HighlightType type) {
+        saveHighlight(type, 1000 - MCGeForce.getInstance().getConfig().getClipLength(), 1000);
+    }
+
     public static void saveHighlight(HighlightType type, int start, int end) {
-        instance.setVideoHighlight(type.getId(), start, end);
+        if (MCGeForce.getInstance().getConfig().isEnabled()) instance.setVideoHighlight(type.getId(), start, end);
     }
 
     public static void showHighlights() {
-        instance.showHighlightsEditor();
+        if (MCGeForce.getInstance().getConfig().isEnabled()) instance.showHighlightsEditor();
     }
 
 }

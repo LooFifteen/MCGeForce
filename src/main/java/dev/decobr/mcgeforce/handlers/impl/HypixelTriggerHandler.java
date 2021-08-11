@@ -1,5 +1,6 @@
 package dev.decobr.mcgeforce.handlers.impl;
 
+import dev.decobr.mcgeforce.MCGeForce;
 import dev.decobr.mcgeforce.bindings.MCGeForceHelper;
 import dev.decobr.mcgeforce.handlers.TriggerHandler;
 import dev.sllcoding.mcgeforce.data.HighlightType;
@@ -14,6 +15,11 @@ public class HypixelTriggerHandler implements TriggerHandler {
     private String username = "";
 
     public long startGameTime = 0;
+
+    @Override
+    public boolean isEnabled() {
+        return MCGeForce.getInstance().getConfig().isHypixelEnabled();
+    }
 
     @Override
     public boolean onMessage(String message) {
@@ -39,6 +45,8 @@ public class HypixelTriggerHandler implements TriggerHandler {
 
     @Override
     public boolean onTitle(String title) {
+        if (!MCGeForce.getInstance().getConfig().isHypixelWinsEnabled()) return false;
+
         title = title.toLowerCase();
         long startTime = startGameTime;
         int endTime = (int) (startGameTime - System.currentTimeMillis());
@@ -69,6 +77,7 @@ public class HypixelTriggerHandler implements TriggerHandler {
     }
 
     public boolean checkKill() {
+        if (!MCGeForce.getInstance().getConfig().isHypixelKillsEnabled()) return false;
         try {
             String killMessageRegex = "(\\w{1,16}).+ (by|of|to|for|with) (" + username + ")";
             String usernamePatternRegex = "^[a-zA-Z0-9_-]{3,16}$";
@@ -83,7 +92,7 @@ public class HypixelTriggerHandler implements TriggerHandler {
                 String killed = killMessageMatcher.group(1);
 
                 if (!killed.equals(username)) {
-                    MCGeForceHelper.saveHighlight(HighlightType.KILL, -9000, 1000);
+                    MCGeForceHelper.saveHighlight(HighlightType.KILL);
                     return true;
                 }
             }
@@ -93,6 +102,7 @@ public class HypixelTriggerHandler implements TriggerHandler {
     }
 
     public boolean checkDeath() {
+        if (!MCGeForce.getInstance().getConfig().isHypixelDeathsEnabled()) return false;
         try {
             String toWorldRegex = "(" + username + ")+ (fell|died|burned)"; // https://regexr.com/594li
             String toPlayerRegex = "(" + username + ")+ (\\w{1,16}).+ (by|of|to|for|with)"; // https://regexr.com/594li
@@ -104,7 +114,7 @@ public class HypixelTriggerHandler implements TriggerHandler {
             Matcher toPlayerMatcher = toPlayerPattern.matcher(message);
 
             if (toWorldMatcher.find() || toPlayerMatcher.find()) {
-                MCGeForceHelper.saveHighlight(HighlightType.DEATH, -9000, 1000);
+                MCGeForceHelper.saveHighlight(HighlightType.DEATH);
                 return true;
             }
         } catch (Exception ignored) {

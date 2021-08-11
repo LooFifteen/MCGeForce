@@ -1,8 +1,10 @@
 package dev.decobr.mcgeforce;
 
 import dev.decobr.mcgeforce.bindings.MCGeForceHelper;
+import dev.decobr.mcgeforce.config.MCGeForceConfig;
 import dev.decobr.mcgeforce.handlers.TriggerHandler;
 import dev.decobr.mcgeforce.handlers.impl.HypixelTriggerHandler;
+import gg.essential.api.utils.GuiUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.util.EnumChatFormatting;
@@ -16,51 +18,55 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Mod(modid = MCGeForce.MODID, version = MCGeForce.VERSION)
+@Mod(modid = "mcgeforce", version = "SLLCoding Rewrite")
 public class MCGeForce {
 
-    public static final String MODID = "mcgeforce";
-    public static final String VERSION = "SLLCoding Rewrite";
-
-
+    @Mod.Instance private static MCGeForce instance;
     private final List<TriggerHandler> triggerHandlers = new ArrayList<>();
-    private static MCGeForce instance;
+    private MCGeForceConfig config;
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        instance = this;
+        config = new MCGeForceConfig();
+        config.preload();
 
         MinecraftForge.EVENT_BUS.register(this);
-        //ClientCommandHandler.instance.registerCommand(new HighlightsCommand());
-
-
         triggerHandlers.add(new HypixelTriggerHandler());
-
         MCGeForceHelper.initialise();
     }
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
+        if (!config.isEnabled()) return;
         String message = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
-
-        for (TriggerHandler triggerHandler : triggerHandlers) if (triggerHandler.onMessage(message)) break;
+        for (TriggerHandler triggerHandler : triggerHandlers) if (triggerHandler.isEnabled()) if (triggerHandler.onMessage(message)) break;
     }
 
     @SubscribeEvent
     public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post event) {
-        if(event.gui instanceof GuiIngameMenu) {
-            GuiButton nvidiaButton = new GuiButton(999, 5, 5, "NVIDIA Highlights");
-            nvidiaButton.width = 100;
+        if (event.gui instanceof GuiIngameMenu) {
+            GuiButton mcGeForceButton = new GuiButton(998, 5, 5, "MCGeForce");
+            mcGeForceButton.width = 100;
+            event.buttonList.add(mcGeForceButton);
 
-            event.buttonList.add(nvidiaButton);
+            if (config.isEnabled()) {
+                GuiButton clips = new GuiButton(999, 5, 27, "Clips");
+                clips.width = 100;
+                event.buttonList.add(clips);
+            }
         }
     }
 
     @SubscribeEvent
     public void onActionPerformed(GuiScreenEvent.ActionPerformedEvent.Post event) {
-        if(event.gui instanceof GuiIngameMenu && event.button.id == 999) {
-            MCGeForceHelper.showHighlights();
+        if (event.gui instanceof GuiIngameMenu) {
+            if (event.button.id == 998) {
+                GuiUtil.open(Objects.requireNonNull(config.gui()));
+            } else if (event.button.id == 999) {
+                MCGeForceHelper.showHighlights();
+            }
         }
     }
 
@@ -70,6 +76,10 @@ public class MCGeForce {
 
     public static MCGeForce getInstance() {
         return instance;
+    }
+
+    public MCGeForceConfig getConfig() {
+        return config;
     }
 
 }

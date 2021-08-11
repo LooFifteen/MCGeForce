@@ -10,7 +10,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.0.3"
+version = "1.1.0"
 group = "dev.decobr.mcgeforce"
 archivesBaseName = "MCGeForce"
 
@@ -20,6 +20,7 @@ targetCompatibility = 1.8
 minecraft {
     version = "1.8.9-11.15.1.2318-1.8.9"
     runDir = "run"
+    clientRunArgs += ["--tweakClass=gg.essential.loader.stage0.EssentialSetupTweaker"]
     mappings = "stable_22"
     makeObfSourceJar = false
 }
@@ -49,4 +50,20 @@ processResources {
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+}
+
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+repositories {
+    maven { url 'https://jitpack.io' }
+    maven { url "https://repo.sk1er.club/repository/maven-public" }
+    maven { url 'https://repo.spongepowered.org/maven' }
+}
+
+dependencies {
+    embed "gg.essential:loader-launchwrapper:1.1.0"
+    implementation "gg.essential:essential-1.8.9-forge:1282"
 }
