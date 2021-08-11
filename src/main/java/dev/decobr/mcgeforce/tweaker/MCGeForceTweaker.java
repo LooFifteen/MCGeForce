@@ -1,11 +1,13 @@
 package dev.decobr.mcgeforce.tweaker;
 
+import gg.essential.loader.stage0.EssentialSetupTweaker;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 import java.util.Map;
 
 @IFMLLoadingPlugin.SortingIndex(1001)
-public class MCGeForceTweaker implements IFMLLoadingPlugin {
+@IFMLLoadingPlugin.MCVersion(value = "1.8.9")
+public class MCGeForceTweaker extends EssentialSetupTweaker implements IFMLLoadingPlugin {
 
     @Override
     public String[] getASMTransformerClass() {
