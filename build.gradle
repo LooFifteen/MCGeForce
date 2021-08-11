@@ -28,10 +28,11 @@ minecraft {
 jar {
     manifest {
         attributes(
-                "FMLCorePlugin": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",
-                "ForceLoadAsMod": true,
+                //"FMLCorePlugin": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",
                 "ModSide": "CLIENT",
-                "FMLCorePluginContainsFMLMod": true
+                "FMLCorePluginContainsFMLMod": "Yes, yes it does",
+                "TweakClass": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",
+                "TweakOrder": "0"
         )
     }
     exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
@@ -67,3 +68,13 @@ dependencies {
     embed "gg.essential:loader-launchwrapper:1.1.0"
     implementation "gg.essential:essential-1.8.9-forge:1282"
 }
+
+task moveResources {
+    doLast {
+        ant.move file: "${buildDir}/resources/main",
+                todir: "${buildDir}/classes/java"
+    }
+}
+
+moveResources.dependsOn processResources
+classes.dependsOn moveResources

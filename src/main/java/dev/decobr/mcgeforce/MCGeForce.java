@@ -47,13 +47,11 @@ public class MCGeForce {
     @SubscribeEvent
     public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post event) {
         if (event.gui instanceof GuiIngameMenu) {
-            GuiButton mcGeForceButton = new GuiButton(998, 5, 5, "MCGeForce");
-            mcGeForceButton.width = 100;
+            GuiButton mcGeForceButton = new GuiButton(998, 5, 5, 100, 20, "MCGeForce");
             event.buttonList.add(mcGeForceButton);
 
             if (config.isEnabled()) {
-                GuiButton clips = new GuiButton(999, 5, 27, "Clips");
-                clips.width = 100;
+                GuiButton clips = new GuiButton(999, 5, 27, 100, 20, "Clips");
                 event.buttonList.add(clips);
             }
         }
