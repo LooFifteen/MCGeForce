@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.VarInsnNode;
 
 public class GuiIngameTransformer implements ITransformer {
+
     @Override
     public String[] getClassName() {
         return new String[]{
@@ -27,4 +28,5 @@ public class GuiIngameTransformer implements ITransformer {
             }
         }
     }
+
 }

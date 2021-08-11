@@ -9,7 +9,9 @@ import java.io.IOException;
  * The class which uses JNI to communicate with the MCGeForce Helper (MCGeForce.dll)
  */
 public class MCGeForceHelper {
-    public static final MCGeForceHelper INSTANCE = new MCGeForceHelper();
+
+    private static final MCGeForceHelper instance = new MCGeForceHelper();
+    private static boolean initialised = false;
 
     static {
         try {
@@ -24,16 +26,19 @@ public class MCGeForceHelper {
     private native void setVideoHighlight(String id, int start, int end);
     private native void showHighlightsEditor();
 
-    public void initialise() {
-        INSTANCE.init("mcgeforcemod");
+    public static void initialise() {
+        if (!initialised) {
+            instance.init("mcgeforcemod");
+            initialised = true;
+        }
     }
 
-    public void saveHighlight(HighlightType type, int start, int end) {
-        INSTANCE.setVideoHighlight(type.getId(), start, end);
+    public static void saveHighlight(HighlightType type, int start, int end) {
+        instance.setVideoHighlight(type.getId(), start, end);
     }
 
-    public void showHighlights() {
-        INSTANCE.showHighlightsEditor();
+    public static void showHighlights() {
+        instance.showHighlightsEditor();
     }
 
 }

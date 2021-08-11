@@ -1,5 +1,6 @@
 package dev.decobr.mcgeforce.handlers.impl;
 
+import dev.decobr.mcgeforce.bindings.MCGeForceHelper;
 import dev.decobr.mcgeforce.handlers.TriggerHandler;
 import dev.sllcoding.mcgeforce.data.HighlightType;
 import net.minecraft.client.Minecraft;
@@ -8,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class HypixelTriggerHandler implements TriggerHandler {
-    public static final HypixelTriggerHandler INSTANCE = new HypixelTriggerHandler();
 
     private String message = "";
     private String username = "";
@@ -20,89 +20,8 @@ public class HypixelTriggerHandler implements TriggerHandler {
      */
     public long startGameTime = 0;
 
-    /**
-     * Check if the message indicates that the game has begun
-     */
-    public boolean checkStartGame() {
-        boolean gameStarted = message.equals("The game starts in 1 second!");
-
-        if (gameStarted) {
-            startGameTime = System.currentTimeMillis();
-            System.out.println("Game has started!");
-        }
-
-        return gameStarted;
-    }
-
-    /**
-     * Check if the message indicates that the player has won a game
-     */
-    public boolean checkWin() {
-        return false;
-    }
-
-    /**
-     * Check if the message indicates that our player has eliminated another player or has died
-     */
-    public boolean checkKill() {
-        try {
-            String killMessageRegex = "(\\w{1,16}).+ (by|of|to|for|with) (" + username + ")";
-            String usernamePatternRegex = "^[a-zA-Z0-9_-]{3,16}$";
-
-            Pattern killMessagePattern = Pattern.compile(killMessageRegex);
-            Pattern usernamePattern = Pattern.compile(usernamePatternRegex);
-
-            Matcher killMessageMatcher = killMessagePattern.matcher(message);
-            Matcher usernameMatcher = usernamePattern.matcher(message.split(" ")[0]);
-
-            if (killMessageMatcher.find() && usernameMatcher.find()) {
-                String killed = killMessageMatcher.group(1);
-                System.out.println("Killed: " + killed);
-                System.out.println("Username: " + username);
-
-                if (!killed.equals(username)) {
-                    createHighlight(HighlightType.KILL, -10000, 1000);
-
-                    return true;
-                }
-            }
-        } catch (Exception ignored) {
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if the message indicates that our player has died
-     */
-    public boolean checkDeath() {
-        try {
-            String toWorldRegex = "(" + username + ")+ (fell|died|burned)"; // https://regexr.com/594li
-            String toPlayerRegex = "(" + username + ")+ (\\w{1,16}).+ (by|of|to|for|with)"; // https://regexr.com/594li
-
-            Pattern toWorldPattern = Pattern.compile(toWorldRegex);
-            Pattern toPlayerPattern = Pattern.compile(toPlayerRegex);
-
-            Matcher toWorldMatcher = toWorldPattern.matcher(message);
-            Matcher toPlayerMatcher = toPlayerPattern.matcher(message);
-
-            if (toWorldMatcher.find() || toPlayerMatcher.find()) {
-                createHighlight(HighlightType.DEATH, -10000, 1000);
-
-                return true;
-            }
-        } catch (Exception ignored) {
-        }
-
-        return false;
-    }
-
-    /**
-     * Fired when a chat message is recieved and we should check all available message types
-     *
-     * @param message the chat message
-     */
-    public boolean checkAll(String message) {
+    @Override
+    public boolean onMessage(String message) {
         if(Minecraft.getMinecraft().thePlayer == null) return false;
 
         this.message = message;
@@ -123,6 +42,91 @@ public class HypixelTriggerHandler implements TriggerHandler {
         return false;
     }
 
+    @Override
+    public boolean onTitle(String title) {
+        title = title.toLowerCase();
+        long startTime = startGameTime;
+        int endTime = (int) (startGameTime - System.currentTimeMillis());
+
+        if (startTime != 0) {
+            if (title.contains("game over")) {
+                MCGeForceHelper.saveHighlight(HighlightType.GAME, endTime, 1000);
+                startGameTime = 0;
+                return true;
+            } else if ((title.contains("you won") || title.startsWith("victory"))) {
+                MCGeForceHelper.saveHighlight(HighlightType.WIN, endTime, 1000);
+                startGameTime = 0;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if the message indicates that the game has begun
+     */
+    public boolean checkStartGame() {
+        boolean gameStarted = message.equals("The game starts in 1 second!");
+
+        if (gameStarted) {
+            startGameTime = System.currentTimeMillis();
+        }
+
+        return gameStarted;
+    }
+
+    /**
+     * Check if the message indicates that our player has eliminated another player or has died
+     */
+    public boolean checkKill() {
+        try {
+            String killMessageRegex = "(\\w{1,16}).+ (by|of|to|for|with) (" + username + ")";
+            String usernamePatternRegex = "^[a-zA-Z0-9_-]{3,16}$";
+
+            Pattern killMessagePattern = Pattern.compile(killMessageRegex);
+            Pattern usernamePattern = Pattern.compile(usernamePatternRegex);
+
+            Matcher killMessageMatcher = killMessagePattern.matcher(message);
+            Matcher usernameMatcher = usernamePattern.matcher(message.split(" ")[0]);
+
+            if (killMessageMatcher.find() && usernameMatcher.find()) {
+                String killed = killMessageMatcher.group(1);
+
+                if (!killed.equals(username)) {
+                    MCGeForceHelper.saveHighlight(HighlightType.KILL, -9000, 1000);
+                    return true;
+                }
+            }
+        } catch (Exception ignored) {}
+
+        return false;
+    }
+
+    /**
+     * Check if the message indicates that our player has died
+     */
+    public boolean checkDeath() {
+        try {
+            String toWorldRegex = "(" + username + ")+ (fell|died|burned)"; // https://regexr.com/594li
+            String toPlayerRegex = "(" + username + ")+ (\\w{1,16}).+ (by|of|to|for|with)"; // https://regexr.com/594li
+
+            Pattern toWorldPattern = Pattern.compile(toWorldRegex);
+            Pattern toPlayerPattern = Pattern.compile(toPlayerRegex);
+
+            Matcher toWorldMatcher = toWorldPattern.matcher(message);
+            Matcher toPlayerMatcher = toPlayerPattern.matcher(message);
+
+            if (toWorldMatcher.find() || toPlayerMatcher.find()) {
+                MCGeForceHelper.saveHighlight(HighlightType.DEATH, -9000, 1000);
+                return true;
+            }
+        } catch (Exception ignored) {
+        }
+
+        return false;
+    }
+
     /**
      * Check if message is from a player, if it is then return true
      * <p>
@@ -136,4 +140,5 @@ public class HypixelTriggerHandler implements TriggerHandler {
         Pattern userMessage = Pattern.compile("(\\[.*])?.* ?(\\w{1,16}): .*");
         return userMessage.matcher(message).matches();
     }
+
 }

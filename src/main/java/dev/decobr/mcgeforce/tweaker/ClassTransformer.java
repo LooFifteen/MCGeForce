@@ -14,6 +14,7 @@ import org.objectweb.asm.tree.ClassNode;
 import java.util.Collection;
 
 public class ClassTransformer implements IClassTransformer {
+
     private static final Logger LOGGER = LogManager.getLogger("MCGeForce");
     private final Multimap<String, ITransformer> transformerMap = ArrayListMultimap.create();
 
@@ -56,4 +57,5 @@ public class ClassTransformer implements IClassTransformer {
 
         return writer.toByteArray();
     }
+
 }

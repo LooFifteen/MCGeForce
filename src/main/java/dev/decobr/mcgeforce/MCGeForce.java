@@ -34,12 +34,16 @@ public class MCGeForce {
      */
     private final List<TriggerHandler> triggerHandlers = new ArrayList<>();
 
+    private static MCGeForce instance;
+
     /**
      * Fired when FML is ready for our mod to start loading
      * @see FMLInitializationEvent
      */
     @EventHandler
     public void init(FMLInitializationEvent event) {
+        instance = this;
+
         // Register stuff
         MinecraftForge.EVENT_BUS.register(this);
         //ClientCommandHandler.instance.registerCommand(new HighlightsCommand());
@@ -48,7 +52,7 @@ public class MCGeForce {
         initTriggerHandlers();
 
         // Initialise connection with GeForce Experience
-        MCGeForceHelper.INSTANCE.initialise();
+        MCGeForceHelper.initialise();
     }
 
     /**
@@ -59,9 +63,7 @@ public class MCGeForce {
     public void onChatMessage(ClientChatReceivedEvent event) {
         String message = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
 
-        for (TriggerHandler triggerHandler : triggerHandlers) {
-            if(triggerHandler.checkAll(message)) break;
-        }
+        for (TriggerHandler triggerHandler : triggerHandlers) if (triggerHandler.onMessage(message)) break;
     }
 
     /**
@@ -85,7 +87,7 @@ public class MCGeForce {
     @SubscribeEvent
     public void onActionPerformed(GuiScreenEvent.ActionPerformedEvent.Post event) {
         if(event.gui instanceof GuiIngameMenu && event.button.id == 999) {
-            MCGeForceHelper.INSTANCE.showHighlights();
+            MCGeForceHelper.showHighlights();
         }
     }
 
@@ -93,6 +95,15 @@ public class MCGeForce {
      * Adds all trigger handlers into an array list
      */
     private void initTriggerHandlers() {
-        triggerHandlers.add(HypixelTriggerHandler.INSTANCE);
+        triggerHandlers.add(new HypixelTriggerHandler());
     }
+
+    public List<TriggerHandler> getTriggerHandlers() {
+        return triggerHandlers;
+    }
+
+    public static MCGeForce getInstance() {
+        return instance;
+    }
+
 }

@@ -1,4 +1,6 @@
-package dev.decobr.mcgeforce.utils;/*
+package dev.decobr.mcgeforce.utils;
+
+/*
  * Class dev.decobr.mcgeforce.utils.NativeUtils is published under the The MIT License:
  *
  * Copyright (c) 2012 Adam Heinrich <adam@adamh.cz>

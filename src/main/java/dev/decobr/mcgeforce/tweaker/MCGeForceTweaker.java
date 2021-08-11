@@ -6,6 +6,7 @@ import java.util.Map;
 
 @IFMLLoadingPlugin.SortingIndex(1001)
 public class MCGeForceTweaker implements IFMLLoadingPlugin {
+
     @Override
     public String[] getASMTransformerClass() {
         return new String[]{ClassTransformer.class.getName()};
@@ -30,4 +31,5 @@ public class MCGeForceTweaker implements IFMLLoadingPlugin {
     public String getAccessTransformerClass() {
         return null;
     }
+
 }
