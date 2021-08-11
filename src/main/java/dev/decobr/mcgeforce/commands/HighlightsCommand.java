@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 
 public class HighlightsCommand extends CommandBase {
+
     public String getCommandName() {
         return "highlights";
     }
@@ -23,4 +24,5 @@ public class HighlightsCommand extends CommandBase {
     public boolean canCommandSenderUseCommand(ICommandSender sender) {
         return true;
     }
+
 }

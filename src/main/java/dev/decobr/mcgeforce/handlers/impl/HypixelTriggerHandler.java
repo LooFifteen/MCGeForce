@@ -13,11 +13,6 @@ public class HypixelTriggerHandler implements TriggerHandler {
     private String message = "";
     private String username = "";
 
-    /**
-     * The time (in milliseconds) that the game started at
-     *
-     * @see System#currentTimeMillis()
-     */
     public long startGameTime = 0;
 
     @Override
@@ -63,9 +58,6 @@ public class HypixelTriggerHandler implements TriggerHandler {
         return false;
     }
 
-    /**
-     * Check if the message indicates that the game has begun
-     */
     public boolean checkStartGame() {
         boolean gameStarted = message.equals("The game starts in 1 second!");
 
@@ -76,9 +68,6 @@ public class HypixelTriggerHandler implements TriggerHandler {
         return gameStarted;
     }
 
-    /**
-     * Check if the message indicates that our player has eliminated another player or has died
-     */
     public boolean checkKill() {
         try {
             String killMessageRegex = "(\\w{1,16}).+ (by|of|to|for|with) (" + username + ")";
@@ -103,9 +92,6 @@ public class HypixelTriggerHandler implements TriggerHandler {
         return false;
     }
 
-    /**
-     * Check if the message indicates that our player has died
-     */
     public boolean checkDeath() {
         try {
             String toWorldRegex = "(" + username + ")+ (fell|died|burned)"; // https://regexr.com/594li

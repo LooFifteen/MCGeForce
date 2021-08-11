@@ -5,9 +5,6 @@ import dev.sllcoding.mcgeforce.data.HighlightType;
 
 import java.io.IOException;
 
-/**
- * The class which uses JNI to communicate with the MCGeForce Helper (MCGeForce.dll)
- */
 public class MCGeForceHelper {
 
     private static final MCGeForceHelper instance = new MCGeForceHelper();

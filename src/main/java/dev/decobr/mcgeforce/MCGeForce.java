@@ -19,46 +19,27 @@ import java.util.List;
 
 @Mod(modid = MCGeForce.MODID, version = MCGeForce.VERSION)
 public class MCGeForce {
-    /**
-     * The mod id of the mod
-     */
+
     public static final String MODID = "mcgeforce";
+    public static final String VERSION = "SLLCoding Rewrite";
 
-    /**
-     * The current version of the mod
-     */
-    public static final String VERSION = "1.0.2";
 
-    /**
-     * An array list of TriggerHandlers to check messages against
-     */
     private final List<TriggerHandler> triggerHandlers = new ArrayList<>();
-
     private static MCGeForce instance;
 
-    /**
-     * Fired when FML is ready for our mod to start loading
-     * @see FMLInitializationEvent
-     */
     @EventHandler
     public void init(FMLInitializationEvent event) {
         instance = this;
 
-        // Register stuff
         MinecraftForge.EVENT_BUS.register(this);
         //ClientCommandHandler.instance.registerCommand(new HighlightsCommand());
 
-        // Populate triggerHandlers arraylist with the available trigger handlers
-        initTriggerHandlers();
 
-        // Initialise connection with GeForce Experience
+        triggerHandlers.add(new HypixelTriggerHandler());
+
         MCGeForceHelper.initialise();
     }
 
-    /**
-     * Fired when a chat message is received by the client
-     * @see ClientChatReceivedEvent
-     */
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
         String message = EnumChatFormatting.getTextWithoutFormattingCodes(event.message.getUnformattedText());
@@ -66,10 +47,6 @@ public class MCGeForce {
         for (TriggerHandler triggerHandler : triggerHandlers) if (triggerHandler.onMessage(message)) break;
     }
 
-    /**
-     * Fired when a GUI is initialising
-     * @see GuiScreenEvent
-     */
     @SubscribeEvent
     public void onGuiInit(GuiScreenEvent.InitGuiEvent.Post event) {
         if(event.gui instanceof GuiIngameMenu) {
@@ -80,22 +57,11 @@ public class MCGeForce {
         }
     }
 
-    /**
-     * Fired when a button is pressed on any GuiScreen instance
-     * @see GuiScreenEvent
-     */
     @SubscribeEvent
     public void onActionPerformed(GuiScreenEvent.ActionPerformedEvent.Post event) {
         if(event.gui instanceof GuiIngameMenu && event.button.id == 999) {
             MCGeForceHelper.showHighlights();
         }
-    }
-
-    /**
-     * Adds all trigger handlers into an array list
-     */
-    private void initTriggerHandlers() {
-        triggerHandlers.add(new HypixelTriggerHandler());
     }
 
     public List<TriggerHandler> getTriggerHandlers() {
