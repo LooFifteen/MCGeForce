@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mcgeforce",
+  "name": "MCGeForce",
+  "description": "Get support for NVIDIA GeForce Highlights in Minecraft",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Decobr"],
+  "credits": "ChachyDev, deamsy",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
