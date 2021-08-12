@@ -2,6 +2,7 @@ package dev.sllcoding.mcgeforce.data;
 
 public enum HighlightType {
 
+    CLIP("mcg_clip", "Clip"),
     KILL("mcg_kill", "Kill"),
     GAME("mcg_game", "Game"),
     WIN("mcg_win", "Win"),
