@@ -29,12 +29,12 @@ public class MCGeForceConfig extends Vigilant {
     }
 
     @Property(
-            type = PropertyType.SLIDER, name = "Clip Length",
-            description = "Length of clips (ms)",
+            type = PropertyType.DECIMAL_SLIDER, name = "Clip Length",
+            description = "Length of clips (s)",
             category = "General", subcategory = "Timings",
-            min = 1000, max = 60000
+            minF = 1, maxF = 60
     )
-    private int clipLength = 10000;
+    private float clipLength = 10;
     /*
         GENERAL
      */
@@ -83,7 +83,7 @@ public class MCGeForceConfig extends Vigilant {
         return enabled;
     }
 
-    public int getClipLength() {
+    public float getClipLength() {
         return clipLength;
     }
 

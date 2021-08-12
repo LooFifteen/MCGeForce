@@ -32,7 +32,7 @@ public class MCGeForceHelper {
     }
 
     public static void saveHighlight(HighlightType type) {
-        saveHighlight(type, 1000 - MCGeForce.getInstance().getConfig().getClipLength(), 1000);
+        saveHighlight(type, (int) (1000 - (MCGeForce.getInstance().getConfig().getClipLength() * 1000)), 1000);
     }
 
     public static void saveHighlight(HighlightType type, int start, int end) {
