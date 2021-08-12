@@ -3,6 +3,8 @@ package dev.decobr.mcgeforce.bindings;
 import dev.decobr.mcgeforce.MCGeForce;
 import dev.decobr.mcgeforce.utils.NativeUtils;
 import dev.sllcoding.mcgeforce.data.HighlightType;
+import dev.sllcoding.mcgeforce.data.ReturnCode;
+import gg.essential.api.EssentialAPI;
 
 import java.io.IOException;
 
@@ -20,14 +22,18 @@ public class MCGeForceHelper {
         }
     }
 
-    private native void init(String id);
+    private native int init(String id);
     private native void setVideoHighlight(String id, int start, int end);
     private native void showHighlightsEditor();
 
     public static void initialise() {
         if (!initialised) {
-            instance.init("mcgeforcemod");
-            initialised = true;
+            ReturnCode.from(instance.init("mcgeforcemod")).ifPresent(code -> {
+                if (code.isSuccess()) initialised = true;
+                else {
+                    EssentialAPI.getNotifications().push("Error while starting MCGeForce.", code.description());
+                }
+            });
         }
     }
 
