@@ -28,7 +28,6 @@ minecraft {
 jar {
     manifest {
         attributes(
-                //"FMLCorePlugin": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",
                 "ModSide": "CLIENT",
                 "FMLCorePluginContainsFMLMod": "Yes, yes it does",
                 "TweakClass": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",

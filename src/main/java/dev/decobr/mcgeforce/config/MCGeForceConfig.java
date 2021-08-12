@@ -41,6 +41,33 @@ public class MCGeForceConfig extends Vigilant {
 
 
     /*
+        VANILLA
+     */
+    @Property(
+            type = PropertyType.SWITCH, name = "Vanilla Clips",
+            description = "Turn on and off clips for Vanilla",
+            category = "Vanilla", subcategory = "General"
+    )
+    private boolean vanillaEnabled = true;
+
+    @Property(
+            type = PropertyType.SWITCH, name = "Kills",
+            description = "Record your kills",
+            category = "Vanilla", subcategory = "General"
+    )
+    private boolean vanillaKillsEnabled = true;
+
+    @Property(
+            type = PropertyType.SWITCH, name = "Deaths",
+            description = "Record your deaths",
+            category = "Vanilla", subcategory = "General"
+    )
+    private boolean vanillaDeathsEnabled = true;
+    /*
+        VANILLA
+     */
+
+    /*
         HYPIXEL
      */
     @Property(
@@ -85,6 +112,18 @@ public class MCGeForceConfig extends Vigilant {
 
     public int getClipLength() {
         return clipLength;
+    }
+
+    public boolean isVanillaEnabled() {
+        return vanillaEnabled;
+    }
+
+    public boolean isVanillaKillsEnabled() {
+        return vanillaKillsEnabled;
+    }
+
+    public boolean isVanillaDeathsEnabled() {
+        return vanillaDeathsEnabled;
     }
 
     public boolean isHypixelEnabled() {

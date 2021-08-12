@@ -4,6 +4,7 @@ import dev.decobr.mcgeforce.MCGeForce;
 import dev.decobr.mcgeforce.bindings.MCGeForceHelper;
 import dev.decobr.mcgeforce.handlers.TriggerHandler;
 import dev.sllcoding.mcgeforce.data.HighlightType;
+import gg.essential.api.EssentialAPI;
 import net.minecraft.client.Minecraft;
 
 import java.util.regex.Matcher;
@@ -18,7 +19,7 @@ public class HypixelTriggerHandler implements TriggerHandler {
 
     @Override
     public boolean isEnabled() {
-        return MCGeForce.getInstance().getConfig().isHypixelEnabled();
+        return MCGeForce.getInstance().getConfig().isHypixelEnabled() && EssentialAPI.getMinecraftUtil().isHypixel();
     }
 
     @Override

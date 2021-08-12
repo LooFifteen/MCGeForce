@@ -4,6 +4,7 @@ import dev.decobr.mcgeforce.bindings.MCGeForceHelper;
 import dev.decobr.mcgeforce.config.MCGeForceConfig;
 import dev.decobr.mcgeforce.handlers.TriggerHandler;
 import dev.decobr.mcgeforce.handlers.impl.HypixelTriggerHandler;
+import dev.decobr.mcgeforce.handlers.impl.VanillaTriggerHandler;
 import gg.essential.api.utils.GuiUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -33,7 +34,10 @@ public class MCGeForce {
         config.preload();
 
         MinecraftForge.EVENT_BUS.register(this);
+
         triggerHandlers.add(new HypixelTriggerHandler());
+        triggerHandlers.add(new VanillaTriggerHandler());
+
         MCGeForceHelper.initialise();
     }
 
