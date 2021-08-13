@@ -10,7 +10,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "1.1.2"
+version = "1.1.3"
 group = "dev.decobr.mcgeforce"
 archivesBaseName = "MCGeForce"
 
@@ -26,9 +26,23 @@ minecraft {
 }
 
 jar {
+    dependsOn configurations.compile
+    from({
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }) {
+        exclude 'club.sk1er.vigilance.example.ExampleMod', 'dummyThing'
+        def i = 0
+        filesMatching("META-INF/NOTICE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/LICENSE*") { name = "$name.${i++}" }
+        filesMatching("META-INF/mods.toml") { name = "$name.${i++}" }
+        filesMatching("LICENSE*") { name = "$name.${i++}" }
+    }
+
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
     manifest {
         attributes(
-                //"FMLCorePlugin": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",
                 "ModSide": "CLIENT",
                 "FMLCorePluginContainsFMLMod": "Yes, yes it does",
                 "TweakClass": "dev.decobr.mcgeforce.tweaker.MCGeForceTweaker",
