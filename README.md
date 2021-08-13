@@ -7,4 +7,4 @@ Download the [latest stable release](https://github.com/SLLCoding/MCGeForce/rele
 
 ## Warnings
 * MCGeForce has only been tested on Forge `1.8.9` version `11.15.1.2318` and support for other versions is currently not planned.
-* MCGeForce uses Essential, it will automatically be installed on game start if not already installed. By using MCGeForce you agree that Essential will be installed and that you will be able to see Essential cosmetics in-game.
+* MCGeForce uses Essential, by using MCGeForce you agree that Essential will be automatically installed on client launch.
